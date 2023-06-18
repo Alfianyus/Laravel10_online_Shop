@@ -9,7 +9,7 @@
                 <h1>Create Category</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="categories.html" class="btn btn-primary">Back</a>
+                <a href="{{route('categories.index')}}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -51,8 +51,8 @@
                 </div>
             </div>
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Create</button>
-                <a href="#" class="btn btn-outline-dark ml-3">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create1</button>
+                <a href="{{route('categories.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </form>
     </div>
@@ -66,13 +66,19 @@
     $("#categoryForm").submit(function(event) {
         event.preventDefault();
         var element = $(this);
+        $("button[type=submit").prop('disabled', true);
         $.ajax({
             url: '{{route("categories.store")}}',
             type: 'post',
             data: element.serializeArray(),
             dataType: 'json',
             success: function(response) {
+                $("button[type=submit").prop('disabled', false);
+
                 if (response["ststus"] == true) {
+
+                    window.location.href = "{{route('categories.index')}}";
+
                     $("#name").removeClass('is-invalid')
                         .siblings('p')
                         .removeClass('invalid-feedback')
@@ -120,6 +126,7 @@
     });
     $("#name").change(function() {
         element = $(this);
+        $("button[type=submit").prop('disabled', true);
         $.ajax({
             url: '{{route("getSlug")}}',
             type: 'get',
@@ -128,6 +135,7 @@
             },
             dataType: 'json',
             success: function(response) {
+                $("button[type=submit").prop('disabled', false);
                 if (response["status"] == true) {
                     $("#slug").val(response["slug"])
                 }
