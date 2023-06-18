@@ -37,23 +37,35 @@
                                 <p></p>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="status">Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="1">Active</option>
-                                    <option value="0">Block</option>
+                                <input type="text" id="image_id" name="image_id" value="">
+                                <label for="image">Image</label>
+                                <div id="image" class="dropzone dz-clickable">
+                                    <div class="dz-message needsclick">
+                                        <br>Drop Files here or click to upload.<br><br>
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="status">Status</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="1">Active</option>
+                                            <option value="0">Block</option>
 
-                                </select>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Create1</button>
-                <a href="{{route('categories.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
-            </div>
+                    <div class="pb-5 pt-3">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a href="{{route('categories.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
+                    </div>
         </form>
     </div>
     <!-- /.card -->
@@ -66,16 +78,16 @@
     $("#categoryForm").submit(function(event) {
         event.preventDefault();
         var element = $(this);
-        $("button[type=submit").prop('disabled', true);
+        $("button[type=submit]").prop('disabled', true);
         $.ajax({
             url: '{{route("categories.store")}}',
             type: 'post',
             data: element.serializeArray(),
             dataType: 'json',
             success: function(response) {
-                $("button[type=submit").prop('disabled', false);
+                $("button[type=submit]").prop('disabled', false);
 
-                if (response["ststus"] == true) {
+                if (response["status"] == true) {
 
                     window.location.href = "{{route('categories.index')}}";
 
@@ -126,7 +138,7 @@
     });
     $("#name").change(function() {
         element = $(this);
-        $("button[type=submit").prop('disabled', true);
+        $("button[type=submit]").prop('disabled', true);
         $.ajax({
             url: '{{route("getSlug")}}',
             type: 'get',
@@ -135,13 +147,38 @@
             },
             dataType: 'json',
             success: function(response) {
-                $("button[type=submit").prop('disabled', false);
+                $("button[type=submit]").prop('disabled', false);
                 if (response["status"] == true) {
                     $("#slug").val(response["slug"])
                 }
 
             }
         });
+    });
+
+
+
+    Dropzone.autoDiscover = false;
+    const dropzone = $("#image").dropzone({
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.file.length > 1) {
+                    this.removeFile(this.files[0]);
+                }
+            });
+        },
+        url: "{{route('temp-image.create')}}",
+        maxFiles: 1,
+        paramName: 'image',
+        addRemoveLinks: true,
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(file, response) {
+            $("#image_id").val(response.image_id);
+            //console.log(response)
+        }
     });
 </script>
 @endsection
