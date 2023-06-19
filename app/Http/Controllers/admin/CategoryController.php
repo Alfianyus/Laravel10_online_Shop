@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
+use Image;
 
 class CategoryController extends Controller
 {
@@ -59,6 +60,12 @@ class CategoryController extends Controller
 
                 File::copy($sPath, $dPath);
 
+                //Generate Image Thumbnail
+                $dPath = public_path() . '/uploads/category/thumb/' . $newImageName;
+                $img = Image::make($sPath);
+                $img->resize(450, 600);
+                $img->save($dPath);
+
                 $category->image = $newImageName;
                 $category->save();
             }
@@ -77,8 +84,17 @@ class CategoryController extends Controller
         }
     }
 
-    public function edit()
+    public function edit($categoryId, Request $request)
     {
+
+        $category = Category::find($categoryId);
+
+        if (empty($category)) {
+            return redirect()->route('categories.index');
+        }
+
+
+        return view('admin.category.edit', compact('category'));
     }
 
     public function update()
