@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="pb-5 pt-3">
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{route('categories.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
                     </div>
         </form>
@@ -85,8 +85,8 @@
         var element = $(this);
         $("button[type=submit]").prop('disabled', true);
         $.ajax({
-            url: '{{route("categories.store")}}',
-            type: 'post',
+            url: '{{route("categories.update",$category->id)}}',
+            type: 'put',
             data: element.serializeArray(),
             dataType: 'json',
             success: function(response) {
