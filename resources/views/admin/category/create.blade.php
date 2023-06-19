@@ -162,12 +162,12 @@
     const dropzone = $("#image").dropzone({
         init: function() {
             this.on('addedfile', function(file) {
-                if (this.file.length > 1) {
+                if (this.files.length > 1) {
                     this.removeFile(this.files[0]);
                 }
             });
         },
-        url: "{{route('temp-image.create')}}",
+        url: "{{route('temp-images.create')}}",
         maxFiles: 1,
         paramName: 'image',
         addRemoveLinks: true,

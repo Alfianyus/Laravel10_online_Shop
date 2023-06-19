@@ -45,7 +45,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 
         //temp-image.create
-        Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-image.create');
+        Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-images.create');
 
 
 
