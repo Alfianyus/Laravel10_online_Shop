@@ -92,17 +92,22 @@
 
                 if (response["status"] == true) {
 
-                    // window.location.href = "{{route('categories.index')}}";
+                    window.location.href = "{{route('sub-categories.index')}}";
 
-                    // $("#name").removeClass('is-invalid')
-                    //     .siblings('p')
-                    //     .removeClass('invalid-feedback')
-                    //     .html("");
+                    $("#name").removeClass('is-invalid')
+                        .siblings('p')
+                        .removeClass('invalid-feedback')
+                        .html("");
 
-                    // $("#slug").removeClass('is-invalid')
-                    //     .siblings('p')
-                    //     .removeClass('invalid-feedback')
-                    //     .html("");
+                    $("#slug").removeClass('is-invalid')
+                        .siblings('p')
+                        .removeClass('invalid-feedback')
+                        .html("");
+
+                    $("#category").removeClass('is-invalid')
+                        .siblings('p')
+                        .removeClass('invalid-feedback')
+                        .html("");
 
                 } else {
                     var errors = response['errors'];
