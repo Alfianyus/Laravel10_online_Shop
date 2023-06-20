@@ -19,7 +19,7 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-        <form action="" id="createBrandForm" name="createBrandForm" method="post">
+        <form action="" id="editBrandForm" name="editBrandForm" method="post">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="brands.html" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </form>
@@ -63,19 +63,21 @@
 
 @section('customJs')
 <script>
-    $("#createBrandForm").submit(function(event) {
+    $("#editBrandForm").submit(function(event) {
         event.preventDefault();
         var element = $(this);
         $("button[type=submit]").prop('disabled', true);
         $.ajax({
-            url: '{{route("brands.store")}}',
-            type: 'post',
+            url: '{{route("brands.update",$brand->id)}}',
+            type: 'put',
             data: element.serializeArray(),
             dataType: 'json',
             success: function(response) {
                 $("button[type=submit]").prop('disabled', false);
 
                 if (response["status"] == true) {
+
+
 
                     // window.location.href = "{{route('categories.index')}}";
 
@@ -90,6 +92,12 @@
                     //     .html("");
 
                 } else {
+
+                    if (response['notFound'] == true) {
+                        window.location.href = "{{route('brands.index')}}";
+
+                    }
+
                     var errors = response['errors'];
                     if (errors['name']) {
                         $("#name").addClass('is-invalid')

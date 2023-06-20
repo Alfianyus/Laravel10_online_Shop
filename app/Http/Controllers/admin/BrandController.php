@@ -65,4 +65,44 @@ class BrandController extends Controller
         $data['brand'] = $brand;
         return view('admin.brands.edit', $data);
     }
+
+    public function update($id, Request $request)
+    {
+        $brand = Brand::find($id);
+
+        if (empty($brand)) {
+            $request->session()->flash('error', 'Record not found');
+            //return redirect()->route('brands.index');
+
+            return response()->json([
+                'status' => false,
+                'notFound' => true
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'slug' => 'required|unique:brands,slug,' . $brand->id . ',id',
+
+
+        ]);
+
+        if ($validator->passes()) {
+            $brand = new Brand();
+            $brand->name = $request->name;
+            $brand->slug = $request->slug;
+            $brand->status = $request->status;
+            $brand->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'Brand Update successfully'
+
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
 }
