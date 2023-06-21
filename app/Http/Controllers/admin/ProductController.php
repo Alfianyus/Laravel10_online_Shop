@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,11 +24,13 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->image_array);
+        exit();
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:products',
             'price' => 'required|numeric',
-            'sku' => 'required',
+            'sku' => 'required|unique:products',
             'track_qty' => 'required|in:Yes,No',
             'category' => 'required|numeric',
             'is_featured' => 'required|in:Yes,No',
@@ -59,6 +62,24 @@ class ProductController extends Controller
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
             $product->save();
+
+            //Save Gallery Pics
+            if (!empty($request->image_array)) {
+                foreach ($request->image_array as $temp_image_id) {
+
+                    $tempImageInfo = TEmpImage::find($temp_image_id);
+                    $extArray = explode('.', $tempImageInfo->name);
+                    $ext = last($extArray); //like jpg,gif,png etc
+
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->image = 'NULL';
+                    $productImage->save();
+
+                    $imageName = $product->id . '-' . $productImage->id . '-' . $ext;
+                    // product_id=>4;
+                }
+            }
 
             $request->session()->flash('success', 'Product Added Successfully');
 
