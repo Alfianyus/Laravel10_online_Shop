@@ -7,11 +7,21 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Image;
 
 class ProductController extends Controller
 {
+
+    public function index()
+    {
+        $products = Product::latest('id')->paginate();
+        $data['products'] = $products;
+        return view('admin.products.list', $data);
+    }
+
     public function create()
     {
         $data = [];
@@ -24,8 +34,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->image_array);
-        exit();
+        // dd($request->image_array);
+        // exit();
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:products',
@@ -34,8 +44,6 @@ class ProductController extends Controller
             'track_qty' => 'required|in:Yes,No',
             'category' => 'required|numeric',
             'is_featured' => 'required|in:Yes,No',
-
-
         ];
 
         if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
@@ -67,7 +75,7 @@ class ProductController extends Controller
             if (!empty($request->image_array)) {
                 foreach ($request->image_array as $temp_image_id) {
 
-                    $tempImageInfo = TEmpImage::find($temp_image_id);
+                    $tempImageInfo = TempImage::find($temp_image_id);
                     $extArray = explode('.', $tempImageInfo->name);
                     $ext = last($extArray); //like jpg,gif,png etc
 
@@ -76,8 +84,30 @@ class ProductController extends Controller
                     $productImage->image = 'NULL';
                     $productImage->save();
 
-                    $imageName = $product->id . '-' . $productImage->id . '-' . $ext;
-                    // product_id=>4;
+                    $imageName = $product->id . '-' . $productImage->id . '-' . time() . '.' . $ext;
+                    $productImage->image = $imageName;
+                    $productImage->save();
+
+                    //Generate Product Thumbnail
+
+                    //Large Image
+                    $sourePath = public_path() . '/temp/' . $tempImageInfo->name;
+                    $destPath = public_path() . '/uploads/product/large/' . $imageName;
+                    $image = Image::make($sourePath);
+                    $image->resize(1400, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                    $image->save($destPath);
+
+                    //Small Image
+                    $destPath = public_path() . '/uploads/product/small/' . $imageName;
+                    $image = Image::make($sourePath);
+                    $image->fit(300, 300);
+                    $image->save($destPath);
+
+                    // product_id=>4; product_image_id=>1
+                    //4-1-.jpg
                 }
             }
 
