@@ -50,9 +50,14 @@
                     <tbody>
                         @if($products->isNotEmpty())
                         @foreach($products as $product)
+
                         <tr>
                             <td>{{$product->id}}</td>
-                            <td><img src="img/product-1.jpg" class="img-thumbnail" width="50"></td>
+                            <td>
+                                @if(!empty($productImage->image))
+                                <img src="{{asset('uploads/product/small/'.$productImage->image)}}" class="img-thumbnail" width="50">
+                                @endif
+                            </td>
                             <td><a href="#">{{$product->title}}</a></td>
                             <td>{{$product->price}}</td>
                             <td>{{$product->qty}} left in Stock</td>
