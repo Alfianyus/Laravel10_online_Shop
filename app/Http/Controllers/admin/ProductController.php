@@ -15,9 +15,15 @@ use Image;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest('id')->with('product_images')->paginate();
+        $products = Product::latest('id')->with('product_images');
+
+        if ($request->get('keyword') != "") {
+            $products = $products->where('title', 'like', '%' . $request->keyword . '%');
+        }
+
+        $products = $products->paginate();
         $data['products'] = $products;
         return view('admin.products.list', $data);
     }
@@ -123,5 +129,10 @@ class ProductController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
+
+
+    public function edit($id, Request $request)
+    {
     }
 }
