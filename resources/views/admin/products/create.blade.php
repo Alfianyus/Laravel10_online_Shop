@@ -71,7 +71,6 @@
                                         <label for="price">Price</label>
                                         <input type="text" name="price" id="price" class="form-control" placeholder="Price">
                                         <p class="error"></p>
-
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -236,12 +235,24 @@
                 $("button[type='submit']").prop('disabled', false);
 
                 if (response['status'] == true) {
-                    $(".error").removeClass('invalid-feedback').html('');
-                    $("input[type='text'], select,input[type='number']").removeClass('is-invalid');
+                    //$(".error").removeClass('invalid-feedback').html('');
+                    //$("input[type='text'], select,input[type='number']").removeClass('is-invalid');
 
                     window.location.href = "{{route('products.index')}}";
                 } else {
                     var errors = response['errors'];
+
+                    // if (errors['title']) {
+                    //     $("#title").addClass('is-invalid')
+                    //         .siblings('p')
+                    //         .addClass('invalid-feedback')
+                    //         .html(errors['title'])
+                    // } else {
+                    //     $("#title").removeClass('is-invalid')
+                    //         .siblings('p')
+                    //         .removeClass('invalid-feedback')
+                    //         .html("")
+                    // }
 
 
                     $(".error").removeClass('invalid-feedback').html('');
@@ -272,7 +283,7 @@
             success: function(response) {
                 $("#sub_category").find("option").not(":first").remove();
                 $.each(response["subCategories"], function(key, item) {
-                    $("#sub_category").append(`<option  value='${item.id}'>${item.name}</option>`)
+                    $("#sub_category").append(`<option  value='${item.id}'>${item.name}</option>`);
                 });
             },
             error: function() {

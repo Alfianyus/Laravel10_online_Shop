@@ -91,9 +91,9 @@ class ProductController extends Controller
                     //Generate Product Thumbnail
 
                     //Large Image
-                    $sourePath = public_path() . '/temp/' . $tempImageInfo->name;
+                    $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
                     $destPath = public_path() . '/uploads/product/large/' . $imageName;
-                    $image = Image::make($sourePath);
+                    $image = Image::make($sourcePath);
                     $image->resize(1400, null, function ($constraint) {
                         $constraint->aspectRatio();
                     });
@@ -102,7 +102,7 @@ class ProductController extends Controller
 
                     //Small Image
                     $destPath = public_path() . '/uploads/product/small/' . $imageName;
-                    $image = Image::make($sourePath);
+                    $image = Image::make($sourcePath);
                     $image->fit(300, 300);
                     $image->save($destPath);
 
@@ -114,7 +114,7 @@ class ProductController extends Controller
             $request->session()->flash('success', 'Product Added Successfully');
 
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Product Added Successfully'
             ]);
         } else {
