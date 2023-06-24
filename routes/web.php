@@ -64,6 +64,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
         Route::get('/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
         Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+        Route::put('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.delete');
+
 
         //Product Routes
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -71,6 +73,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/products', [ProductController::class, 'store'])->name('products.store');
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::put('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
+
 
 
 
