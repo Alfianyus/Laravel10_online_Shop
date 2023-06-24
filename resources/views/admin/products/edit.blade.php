@@ -60,7 +60,19 @@
                         </div>
                     </div>
                     <div class="row" id="product-gallery">
-
+                        @if($productImage->isNotEmpty())
+                        @foreach($productImage as $image)
+                        <div class="col-md-3" id="image-row-{{$image->id}}">
+                            <div class="card">
+                                <input type="hidden" name="image_array[]" value="{{$image->id}}">
+                                <img src="{{asset('uploads/product/small/'.$image->image)}}" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <a href="javascript:void(0)" onclick="deleteImage({{$image->id}})" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
                     </div>
                     <div class="card mb-3">
                         <div class="card-body">
@@ -154,7 +166,7 @@
                                     <option value="">Select a Sub Category</option>
                                     @if($subCategories->isNotEmpty())
                                     @foreach($subCategories as $subCategory)
-                                    <option {{($product->sub_category_id == $subCategory->id)?'selected':''}} value="{{$category->id}}">{{$category->name}}</option>
+                                    <option {{($product->sub_category_id == $subCategory->id)?'selected':''}} value="{{$subCategory->id}}">{{$subCategory->name}}</option>
 
                                     @endforeach
                                     @endif
@@ -170,7 +182,7 @@
                                     <option value="">Select a brand</option>
                                     @if($brands->isNotEmpty())
                                     @foreach($brands as $brand)
-                                    <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                    <option {{($product->brand_id == $brand->id)?'selected':''}} value="{{$brand->id}}">{{$brand->name}}</option>
 
                                     @endforeach
                                     @endif
@@ -183,8 +195,8 @@
                             <h2 class="h4 mb-3">Featured product</h2>
                             <div class="mb-3">
                                 <select name="is_featured" id="is_featured" class="form-control">
-                                    <option value="No">No</option>
-                                    <option value="Yes">Yes</option>
+                                    <option {{($product->is_featured == 'No')?'selected':''}} value="No">No</option>
+                                    <option {{($product->is_featured == 'Yes')?'selected':''}} value="Yes">Yes</option>
                                 </select>
                                 <p class="error"></p>
                             </div>
@@ -231,8 +243,8 @@
         var formArray = $(this).serializeArray();
         $("button[type='submit']").prop('disabled', true);
         $.ajax({
-            url: '{{route("products.store")}}',
-            type: 'post',
+            url: '{{route("products.update",$product->id)}}',
+            type: 'put',
             data: formArray,
             dataType: 'json',
             success: function(response) {
@@ -299,9 +311,12 @@
 
     Dropzone.autoDiscover = false;
     const dropzone = $("#image").dropzone({
-        url: "{{route('temp-images.create')}}",
+        url: "{{route('product-images.update')}}",
         maxFiles: 10,
         paramName: 'image',
+        params: {
+            'product_id': '{{$product->id}}'
+        },
         addRemoveLinks: true,
         acceptedFiles: "image/jpeg,image/png,image/gif",
         headers: {
@@ -328,7 +343,26 @@
 
     function deleteImage(id) {
         $("#image-row-" + id).remove();
+        if (confirm("Are you sure want to delete image?")) {
+            $.ajax({
+                url: '{{route("product-images.destroy")}}',
+                type: 'delete',
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    if (response.status == true) {
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
 
+                    }
+                }
+
+
+            });
+
+        }
     }
 </script>
 @endsection
