@@ -65,7 +65,6 @@
                                         <select name="showHome" id="showHome" class="form-control">
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
-
                                         </select>
                                     </div>
                                 </div>
