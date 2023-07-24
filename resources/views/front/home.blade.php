@@ -111,6 +111,40 @@
         </div>
         <div class="row pb-3">
 
+            @if($categoriesProduct->isNotEmpty())
+            @foreach($categoriesProduct as $category)
+            @php
+            $categories=$category->image;
+            @endphp
+
+
+
+            <div class="col-md-3">
+                <div class="card category-card">
+                    <div class="product-image position-relative">
+                        <a href="" class="product-img">
+                            <!-- <img class="card-img-top" src="{{asset('front-assets/images/product-1.jpg')}}" alt=""> -->
+                            @if(!empty($categories))
+                            <img class="card-img-top" src="{{asset('uploads/category/thumb/'.$categories)}}" />
+                            @else
+                            <img src="{{asset('admin-assets/img/default-150x150.png')}}" /> @endif
+                        </a>
+                        <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+
+                        <div class="product-action">
+                            <a class="btn btn-dark" href="#">
+                                <i class="fa fa-shopping-cart"></i> Add To Cart
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-image position-relative">
+                        <a class="">{{$category->name}}</a>
+                    </div>
+                </div>
+            </div>
+
+            @endforeach
+            @endif
 
         </div>
     </div>

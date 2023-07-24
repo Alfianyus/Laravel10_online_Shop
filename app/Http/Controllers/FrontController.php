@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,14 @@ class FrontController extends Controller
 
         $latestProducts = Product::orderByDesc('id', 'DESC')
             ->where('status', 1)
-            ->take(8)->get();
+            ->limit(8)->get();
         $data['latestProducts'] = $latestProducts;
+
+        $categories = Category::where('showHome', 'Yes')
+            ->orderByDesc('id')
+            ->where('status', 1)->get();
+        $data['categoriesProduct'] = $categories;
+
 
         return view('front.home', $data);
     }
