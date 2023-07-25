@@ -114,6 +114,7 @@
         var url = '{{route("categories.delete","ID")}}';
         var newUrl = url.replace("ID", id)
 
+
         if (confirm("Are you sure delete")) {
             $.ajax({
                 url: newUrl,
@@ -125,7 +126,6 @@
                 },
                 success: function(response) {
                     if (response["status"]) {
-
                         window.location.href = "{{route('categories.index')}}";
                     }
                 }

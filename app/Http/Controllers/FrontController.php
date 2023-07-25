@@ -23,10 +23,10 @@ class FrontController extends Controller
             ->limit(8)->get();
         $data['latestProducts'] = $latestProducts;
 
-        $categories = Category::where('showHome', 'Yes')
+        $categoriesp = Category::where('showHome', 'Yes')
             ->orderByDesc('id')
             ->where('status', 1)->get();
-        $data['categoriesProduct'] = $categories;
+        $data['categoriesProduct'] = $categoriesp;
 
 
         return view('front.home', $data);

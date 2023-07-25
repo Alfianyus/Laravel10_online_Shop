@@ -89,6 +89,7 @@ class CategoryController extends Controller
     public function edit($categoryId, Request $request)
     {
 
+
         $category = Category::find($categoryId);
 
         if (empty($category)) {
@@ -134,7 +135,6 @@ class CategoryController extends Controller
             if (!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
                 $extArray = explode('.', $tempImage->name);
-
                 $ext = last($extArray);
 
                 $newImageName = $category->id . '-' . time() . '.' . $ext;
